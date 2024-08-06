@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🖩 Calculadora Priori</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 class=%22feather feather-calculator%22><rect x=%223%22 y=%222%22 width=%2218%22 height=%2220%22 rx=%222%22 ry=%222%22></rect><line x1=%228%22 y1=%226%22 x2=%228%22 y2=%226%22></line><line x1=%2216%22 y1=%226%22 x2=%2216%22 y2=%226%22></line><line x1=%208%22 y1=%22 12%22 x2=%228%22 y2=%2212%22></line><line x1=%2216%22 y1=%2212%22 x2=%2216%22 y2=%2212%22></line><line x1=%228%22 y1=%2218%22 x2=%228%22 y2=%2218%22></line><line x1=%2216%22 y1=%2218%22 x2=%2216%22 y2=%2218%22></line></svg>">
+    <style>
+        body {
+            background-color: #313131;
+            font-family: 'Arial Black', sans-serif;
+            color: #fff;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            font-size: 36px;
+            line-height: 1.2;
+        }
+        .container {
+            max-width: 500px;
+            margin: auto;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        button {
+            background-color: #3a2d32;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #292124;
+        }
+        .result {
+            background-color: #819852;
+            color: #3B4333;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 24px;
+            padding: 10px;
+            margin-top: 20px;
+        }
+        .credits {
+            font-size: 10px;
+            color: #fff;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🖩<br>Calculadora<br>Priori</h1>
+    <div class="container">
+        <label for="valorFabrica">Valor da Fábrica:</label>
+        <input type="number" id="valorFabrica" placeholder="Digite o valor da fábrica">
+        
+        <label for="lucro">Lucro (%):</label>
+        <input type="number" id="lucro" placeholder="Digite o percentual de lucro">
+        
+        <label for="notaFiscal">Nota Fiscal (%):</label>
+        <input type="number" id="notaFiscal" placeholder="Digite a alíquota da nota fiscal">
+        
+        <label for="comissao">Comissão (%):</label>
+        <input type="number" id="comissao" placeholder="Digite o percentual de comissão">
+        
+        <button onclick="calcularPrecoFinal()">Calcular Preço Final</button>
+        
+        <div id="precoFinal" class="result"></div>
+    </div>
+    <div class="credits">By NamelessReaper</div>
+
+    <script>
+        function calcularPrecoFinal() {
+            const valorFabrica = parseFloat(document.getElementById('valorFabrica').value);
+            const lucroPercent = parseFloat(document.getElementById('lucro').value);
+            const notaFiscalPercent = parseFloat(document.getElementById('notaFiscal').value);
+            const comissaoPercent = parseFloat(document.getElementById('comissao').value);
+
+            if (isNaN(valorFabrica) || isNaN(lucroPercent) || isNaN(notaFiscalPercent) || isNaN(comissaoPercent)) {
+                alert("Por favor, preencha todos os campos com valores válidos.");
+                return;
+            }
+
+            const lucro = valorFabrica * (lucroPercent / 100);
+            const valorLiquido = valorFabrica + lucro;
+            const notaFiscal = notaFiscalPercent / 100;
+            const comissao = comissaoPercent / 100;
+
+            const precoFinal = valorLiquido / (1 - (notaFiscal + (comissao * 0.88)));
+
+            document.getElementById('precoFinal').innerText = "Preço Final: R$ " + precoFinal.toFixed(2);
+        }
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, function(error) {
+                    console.log('ServiceWorker registration failed: ', error);
+                });
+            });
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            let deferredPrompt = e;
+            let installButton = document.createElement('button');
+            installButton.innerText = 'Instalar Aplicativo';
+            document.body.appendChild(installButton);
+            installButton.addEventListener('click', () => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the A2HS prompt');
+                    } else {
+                        console.log('User dismissed the A2HS prompt');
+                    }
+                    deferredPrompt = null;
+                    installButton.style.display = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

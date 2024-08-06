@@ -1,0 +1,16 @@
+{
+    "name": "Calculadora Priori",
+    "short_name": "Priori",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#313131",
+    "description": "Calculadora para determinar o preço final de produtos.",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#313131"
+}
